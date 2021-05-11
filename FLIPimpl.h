@@ -9,6 +9,14 @@
 #include <cuda_gl_interop.h>
 #include <device_launch_parameters.h>
 
+#include <stdio.h>
+#include <iostream>
+
+
+#include <fstream>
+#include <string>
+#include <vector>
+
 class FlipSim
 {
 
@@ -19,7 +27,7 @@ public:
 	float3 BoxSize;
 	float tileSize;
 	
-	float time2;
+	float3* Positions;
 
 	uint3 BoxIndice;
 
@@ -56,7 +64,11 @@ public:
 	struct cudaGraphicsResource* cuda_col_resource;
 	size_t num_bytes_col;
 
-	FlipSim(float width, float height, float length, float tsize, unsigned int partcount, float tstep);
+	std::vector<int> CollideInd;
+
+	int3* CollideIndCud; 
+
+	FlipSim(float width, float height, float length, float tsize, unsigned int partcount, float tstep, std::ifstream &scollider);
 
 	void TransferToGrid();
 

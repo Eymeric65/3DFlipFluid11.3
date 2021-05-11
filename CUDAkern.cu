@@ -737,6 +737,21 @@ __global__ void add_pressure_MAC_k(uint3 MACbox, uint3 box, float* gridPressure,
 
 }
 
+__global__ void set_collider_k(uint3 box, int3* colliderind,int vecsize,unsigned int* type)
+{
+	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
+	unsigned int stride = blockDim.x * gridDim.x;
+	for (unsigned int i = index; i < vecsize; i += stride)
+	{
+		//if (i <= 20)
+		//{
+		//	printf("test case %d %d %d %d\n", colliderind[i].x, colliderind[i].y, colliderind[i].z, i);
+		//}
+		type[gind(colliderind[i].x, colliderind[i].z, colliderind[i].y,box)] = 1;
+	}
+
+}
+
 // FONCTION externe -----------------------------------------------------------------------------------------------------
 
 extern "C"
@@ -787,6 +802,14 @@ void TransfertToGridV2(FlipSim * flipEngine)
 		box,
 		flipEngine->type,
 		flipEngine->tileSize);
+
+
+	int vecsize = (flipEngine->CollideInd).size()/3;
+	set_collider_k << <vecsize, 1 >> > (
+		box,
+		flipEngine->CollideIndCud,
+		vecsize,
+		flipEngine->type);
 
 	getLastCudaError("Kernel execution failed: set_typeWalls_k");
 }

@@ -1,6 +1,6 @@
 #include "FLIPimpl.h"
 #include <assert.h>
-#include <iostream>
+
 
 
 extern "C" void TransfertToGridV2(FlipSim * flipEngine);
@@ -19,17 +19,44 @@ extern "C" void AddPressureV2(FlipSim * flipEngine);
 
 extern "C" void setTempWall(FlipSim * flipEngine, bool trigger);
 
-FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned int partcount,float tstep)
+FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned int partcount,float tstep, std::ifstream &collider )
 {
 
 	PartCount = partcount;
 
 	TimeStep = tstep;
 
-	time2 = 3;
+	Positions = (float3*)malloc(sizeof(float3) * PartCount);
 
 	std::cout << "reset partvit" << std::endl;
 	//cudaMalloc(&pos, PartCount * sizeof(float3));
+	std::string line;
+
+	if (collider.is_open())
+	{
+		while (std::getline(collider, line))
+		{
+
+			int ind [3] ;
+
+			std::string delimiter = " ";
+
+			size_t pos = 0;
+			//std::string token;
+			//std::cout << "ah" << std::endl;
+			while ((pos = line.find(delimiter)) != std::string::npos) {
+				CollideInd.push_back(stoi(line.substr(0, pos)));
+				//std::cout << stoi(line.substr(0, pos))  << std::endl;
+				line.erase(0, pos + delimiter.length());
+			}
+			CollideInd.push_back(stoi(line.substr(pos + delimiter.length())));
+			//std::cout << stoi(line.substr(pos + delimiter.length())) << std::endl;
+			//std::cout << ind[0] << std::endl;
+		}
+		collider.close();
+	}
+
+	//std::cout << CollideInd[800] << std::endl;
 
 	BoxSize = make_float3(width, height, length);
 
@@ -82,6 +109,9 @@ FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned i
 	cudaMalloc(&type, IndiceCount * sizeof(unsigned int)); //
 
 	cudaMalloc(&GridDiv, IndiceCount * sizeof(float));
+
+	cudaMalloc(&CollideIndCud, CollideInd.size() * sizeof(int));
+	cudaMemcpy(CollideIndCud, &CollideInd[0], CollideInd.size() * sizeof(int), cudaMemcpyHostToDevice);
 
 
 
@@ -164,12 +194,14 @@ void FlipSim::Integrate()
 
 void FlipSim::EndCompute()
 {
+	cudaMemcpy( Positions,Partpos, PartCount * sizeof(float3), cudaMemcpyDeviceToHost);
+
 	cudaGraphicsUnmapResources(1, &cuda_pos_resource, 0);
 
 	cudaGraphicsUnmapResources(1, &cuda_col_resource, 0);
 	//std::cout << "la taille est " << Partpos[0].x << std::endl;
 
-	//cudaMemcpy(&PartposExt,&Partpos,PartCount* 3 * sizeof(float), cudaMemcpyHostToDevice);
+	
 
 }
 

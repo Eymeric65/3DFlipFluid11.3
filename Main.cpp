@@ -1,7 +1,7 @@
 //#include <glad/glad.h>
 //#include <GLFW/glfw3.h>
 
-#include <stdio.h>
+//#include <stdio.h>
 //#include <iostream>
 //#include <fstream>
 //#include <vector>
@@ -26,6 +26,8 @@
 #include "GeoFunc.h"
 #include "FLIPimpl.h"
 
+#include <fstream>
+#include <stdio.h>
 
 //#define ONESTEPSIM
 
@@ -34,6 +36,10 @@
 #define BREAKTIME 40
 
 #define SPHERE_SIZE 0.2
+
+
+
+#define WRITE_FILE 
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -56,11 +62,20 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+std::string filename = "ResultC_02";
+
+std::string CollideName = "Formes1";
+
 int main()
 {
     //fichier de sortie
-    //std::ofstream Result;
-    //Result.open("Result/Result_O1.txt");
+    std::ofstream Result;
+    Result.open("Result/" + filename + ".txt");
+
+
+    std::ifstream Collider;
+
+    Collider.open("Collider/" + CollideName + ".txt");
 
    
     // a ne pas modifier ----------------------------------------------------------------------------------------------------
@@ -113,17 +128,17 @@ int main()
 
     //experience assez grande
     //test drop 
-    
+    /*
     int index = 0;
     float offset = 0.0f;
 
-    for (int x = 0; x < 40; x += 1)
+    for (int x = 0; x < 30; x += 1)
     {
 
 
         for (int y = 0; y < 30; y += 1)
         {
-            for (int z = 0; z < 55; z += 1)
+            for (int z = 0; z < 30; z += 1)
             {
                 glm::vec3 translation;
                 translation.x = (float)x / 2.0f + 1.141592f;
@@ -139,10 +154,39 @@ int main()
 
     const int PartCount = position.size();
 
-    //Result << PartCount<<","<<0.1;
+    Result << PartCount<<","<<0.1<< "\n";
 
     FlipSim FlipEngine(102, 22.0, 30, 1, PartCount,0.1);
+    */
 
+    int index = 0;
+    float offset = 0.0f;
+
+    for (int x = 0; x < 30; x += 1)
+    {
+
+
+        for (int y = 0; y < 30; y += 1)
+        {
+            for (int z = 0; z < 30; z += 1)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / 2.0f + 15.141592f;
+                translation.y = (float)y / 2.0f + 23.141592f;
+
+                translation.z = (float)z / 2.0f + 15.141592f;
+
+                position.push_back(translation);
+
+            }
+        }
+    }
+
+    const int PartCount = position.size();
+
+    Result << PartCount << "," << 0.1 << "\n";
+
+    FlipSim FlipEngine(40.0, 40.0, 40.0, 1.0, PartCount, 0.1,Collider );
     
     /*
                         //longueur 1000, hauteur 200, largeur 280
@@ -393,12 +437,22 @@ int main()
 
             FlipEngine.EndCompute();
 
+#ifdef WRITE_FILE
+
+            for (unsigned int i = 0; i < FlipEngine.PartCount; i++)
+            {
+                Result << FlipEngine.Positions[i].x << "," << FlipEngine.Positions[i].y << "," << FlipEngine.Positions[i].z << ";";
+            }
+
+            Result << "\n";
            
+#endif
+
         }
 
 #endif
         
-
+        
         
 
         //--------------------------------------------------------------------------------
@@ -416,9 +470,10 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        //std::cout << position[15000].x << std::endl;
+        //std::cout << FlipEngine.Positions[15000].x << std::endl;
     }
 
+    Result.close();
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ---------------------------------------s---------------------------------
