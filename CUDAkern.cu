@@ -362,6 +362,7 @@ __global__ void set_typeWalls_k(uint3 box, unsigned int* type, float tsize)
 	*/
 
 	//colone de fluide 
+	/*
 	if (blockIdx.x * tsize >= 30 + tsize &&
 		blockIdx.z * tsize <= 10 + tsize)
 	{
@@ -372,7 +373,7 @@ __global__ void set_typeWalls_k(uint3 box, unsigned int* type, float tsize)
 	{
 		type[index] = 1;
 	}
-
+	*/
 	// fonction pour autiste bien sure qu'elle marche
 
 #ifdef DEBUG
@@ -536,10 +537,10 @@ __global__ void RKT2_k(int partCount, float3* Ppos, float3* Pvit, float tstep, f
 
 
 
-		if (type[gind(XGridIB, YGridIB, ZGridIB, box)] == 1)
-		{
-			printf("je suis dans la sauce %d %d %d \n", XGridI, YGridI, ZGridI);
-		}
+		//if (type[gind(XGridIB, YGridIB, ZGridIB, box)] == 1)
+		//{
+		//	printf("je suis dans la sauce %d %d %d \n", XGridI, YGridI, ZGridI);
+		//}
 
 		//printf("hmm %f \n", absmin(Pvit[index].y * tstep, tsize * 0.98));
 
@@ -603,7 +604,7 @@ __global__ void div_calc_k(float3* MACgridSpeed, uint3 box, uint3 MACbox, float*
 		float dens =
 			(MACGridWeight[gind(blockIdx.x, blockIdx.y, blockIdx.z, MACbox)].x + MACGridWeight[gind(blockIdx.x + 1, blockIdx.y, blockIdx.z, MACbox)].x +
 				MACGridWeight[gind(blockIdx.x, blockIdx.y, blockIdx.z, MACbox)].y + MACGridWeight[gind(blockIdx.x, blockIdx.y + 1, blockIdx.z, MACbox)].y +
-				MACGridWeight[gind(blockIdx.x, blockIdx.y, blockIdx.z, MACbox)].z + MACGridWeight[gind(blockIdx.x, blockIdx.y, blockIdx.z + 1, MACbox)].z) / 2;
+				MACGridWeight[gind(blockIdx.x, blockIdx.y, blockIdx.z, MACbox)].z + MACGridWeight[gind(blockIdx.x, blockIdx.y, blockIdx.z + 1, MACbox)].z) / 3;
 
 		gridDiv[index] =
 			(MACgridSpeed[gind(blockIdx.x + 1, blockIdx.y, blockIdx.z, MACbox)].x - MACgridSpeed[gind(blockIdx.x, blockIdx.y, blockIdx.z, MACbox)].x +
@@ -941,7 +942,7 @@ void JacobiIterV2(FlipSim * flipEngine, int step)
 		flipEngine->type,
 		flipEngine->tileSize,
 		flipEngine->MACGridWeight,
-		12.0 * 3,
+		27.0 ,
 		flipEngine->TimeStep);
 
 	getLastCudaError("Kernel execution failed: div_calc_k");

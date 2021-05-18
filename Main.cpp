@@ -37,7 +37,7 @@
 
 #define SPHERE_SIZE 0.2
 
-
+#define SIMTIME 40
 
 #define WRITE_FILE 
 
@@ -62,15 +62,17 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-std::string filename = "ResultC_02";
+std::string filename = "Simulate_04_b_col2_512k";
 
-std::string CollideName = "Formes1";
+std::string CollideName = "IndicesForme2_2";
 
 int main()
 {
     //fichier de sortie
-    std::ofstream Result;
-    Result.open("Result/" + filename + ".txt");
+    std::ofstream Result ("Result/" + filename + ".dat", std::ios::out | std::ios::binary);
+
+    //Result.open("Result/" + filename + ".txt");
+
 
 
     std::ifstream Collider;
@@ -162,19 +164,17 @@ int main()
     int index = 0;
     float offset = 0.0f;
 
-    for (int x = 0; x < 30; x += 1)
+    for (int x = 0; x < 85; x += 1) // 80
     {
-
-
-        for (int y = 0; y < 30; y += 1)
+        for (int y = 0; y < 80; y += 1)
         {
-            for (int z = 0; z < 30; z += 1)
+            for (int z = 0; z < 85; z += 1)
             {
                 glm::vec3 translation;
-                translation.x = (float)x / 2.0f + 15.141592f;
-                translation.y = (float)y / 2.0f + 23.141592f;
+                translation.x = (float)x / 2.7f + 108.1f;
+                translation.y = (float)y / 2.7f + 65.1f;
 
-                translation.z = (float)z / 2.0f + 15.141592f;
+                translation.z = (float)z / 2.7f + 108.1f;
 
                 position.push_back(translation);
 
@@ -184,9 +184,13 @@ int main()
 
     const int PartCount = position.size();
 
-    Result << PartCount << "," << 0.1 << "\n";
+    //Result << PartCount << "," << 0.1 << "\n";
 
-    FlipSim FlipEngine(40.0, 40.0, 40.0, 1.0, PartCount, 0.1,Collider );
+    Result.write((char*)&PartCount,sizeof(PartCount));
+
+    
+
+    FlipSim FlipEngine(180.0, 100.0, 180.0, 1.0, PartCount, 0.1,Collider );
     
     /*
                         //longueur 1000, hauteur 200, largeur 280
@@ -334,11 +338,14 @@ int main()
 
     bool walls = true;
 
+    float timer = 0;
+    float TimerSim;
+
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window)&& timer<SIMTIME)
     {
-
+        
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
@@ -346,7 +353,7 @@ int main()
         lastFrame = currentFrame;
         FPSlimiter++;
 
-
+        /*
         if (FPSlimiter > 100)
         {
             FPSlimiter = 0;
@@ -354,7 +361,7 @@ int main()
             int fpsfs = snprintf(fps, sizeof fps, "%f", 1 / deltaTime);
             glfwSetWindowTitle(window, fps);
         }
-
+        */
         //FlipEngine.TimeStep = deltaTime;
 
         //printf("diff de temps %f \n", deltaTime);
@@ -410,17 +417,20 @@ int main()
         if (glfwGetTime() > WAITTIME)
         {
 
+            TimerSim = glfwGetTime();
 
+            timer += FlipEngine.TimeStep;
+            
 
             FlipEngine.StartCompute();
 
             FlipEngine.TransferToGrid();
 
-            if (glfwGetTime() < BREAKTIME + WAITTIME)
+            /*if (glfwGetTime() < BREAKTIME + WAITTIME)
             {
                 FlipEngine.TempWalls(true);
             }
-
+            */
             FlipEngine.AddExternalForces();
 
             FlipEngine.Boundaries();
@@ -437,15 +447,29 @@ int main()
 
             FlipEngine.EndCompute();
 
+            std::cout << "sim_t : " << timer <<" render_t : " << -TimerSim+ glfwGetTime();
+
 #ifdef WRITE_FILE
 
+            TimerSim = glfwGetTime();
+            /*
             for (unsigned int i = 0; i < FlipEngine.PartCount; i++)
             {
                 Result << FlipEngine.Positions[i].x << "," << FlipEngine.Positions[i].y << "," << FlipEngine.Positions[i].z << ";";
             }
 
             Result << "\n";
-           
+            */
+
+            for (unsigned int i = 0; i < FlipEngine.PartCount; i++)
+            {
+                Result.write((char*)&FlipEngine.Positions[i].x, sizeof(float));
+                Result.write((char*)&FlipEngine.Positions[i].z, sizeof(float));
+                Result.write((char*)&FlipEngine.Positions[i].y, sizeof(float));
+            }
+
+            std::cout <<  " write_t : " << -TimerSim + glfwGetTime()<<std::endl;
+
 #endif
 
         }
