@@ -11,10 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="FLIPimpl.h" />
-    <ClInclude Include="GeoFunc.h" />
-    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="CUDAkern.cu">
@@ -24,12 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FLIPimpl.cpp" />
-    <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="fragmentbase.fs" />
-    <None Include="vertexbase.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A8E4B91C-6487-4657-8638-97A8197E7032}</ProjectGuid>

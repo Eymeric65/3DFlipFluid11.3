@@ -20,10 +20,10 @@
 
 #include <math.h>
 
-#include "Shader.h"
-#include "Camera.h"
+#include "Utilitaire/Shader.h"
+#include "Utilitaire/Camera.h"
 
-#include "GeoFunc.h"
+#include "Utilitaire/GeoFunc.h"
 #include "FLIPimpl.h"
 
 #include <fstream>
@@ -115,7 +115,7 @@ int main()
     }
     // fin  ----------------------------------------------------------------------------------------------------
 
-    Shader firstshader("vertexbase.vs", "fragmentbase.fs");
+    Shader firstshader("Shader/vertexbase.vs", "Shader/fragmentbase.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
