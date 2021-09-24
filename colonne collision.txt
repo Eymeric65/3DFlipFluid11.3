@@ -1,0 +1,31 @@
+	//le mur
+	/*
+	if (blockIdx.x >= 30 &&
+		blockIdx.y <= 12 &&
+		blockIdx.x <= 33 )
+	{
+		type[index] = 1;
+	}
+
+	if (blockIdx.x >= 29 &&
+		blockIdx.y == 13 &&
+		blockIdx.x <= 33 )
+	{
+		type[index] = 1;
+	}
+	*/
+
+	//colone de fluide 
+	/*
+	if (blockIdx.x * tsize >= 30 + tsize &&
+		blockIdx.z * tsize <= 10 + tsize)
+	{
+		type[index] = 1;
+	}
+	if (blockIdx.x * tsize >= 30 + tsize &&
+		blockIdx.z * tsize >= 18 + tsize)
+	{
+		type[index] = 1;
+	}
+	*/
+	// fonction pour autiste bien sure qu'elle marche

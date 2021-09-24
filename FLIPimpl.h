@@ -22,8 +22,6 @@ class FlipSim
 
 public:
 
-	//float PartpositionsK;
-
 	float3 BoxSize;
 	float tileSize;
 	
@@ -40,7 +38,7 @@ public:
 
 	float3* MACGridWeight;
 
-	unsigned int* type; // 0 is air 1 is solid 2 is fluid
+	unsigned int* type; // 0 air 1 solide 2 fluide
 
 	float* GridPressureB;
 	float* GridPressureA;
@@ -52,7 +50,6 @@ public:
 	float3* Partpos;
 	
 	float3* Partvit;
-
 
 	float* Partcol;
 
@@ -76,7 +73,7 @@ public:
 
 	void AddExternalForces();
 
-	void Integrate(); //euler
+	void Integrate();
 
 	void StartCompute();
 
@@ -93,16 +90,8 @@ public:
 	void AddPressure();
 
 	void TempWalls(bool Trigger);
-
-	//a faire
 	
 	void endSim();
-
-
-
-
 };
-
-
 
 #endif

@@ -1,0 +1,32 @@
+//experience assez grande
+    //test drop 
+    /*
+    int index = 0;
+    float offset = 0.0f;
+
+    for (int x = 0; x < 30; x += 1)
+    {
+
+
+        for (int y = 0; y < 30; y += 1)
+        {
+            for (int z = 0; z < 30; z += 1)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / 2.0f + 1.141592f;
+                translation.y = (float)y / 2.0f +5.141592f;
+
+                translation.z = (float)z / 2.0f + 1.141592f;
+
+                position.push_back(translation);
+
+            }
+        }
+    }
+
+    const int PartCount = position.size();
+
+    Result << PartCount<<","<<0.1<< "\n";
+
+    FlipSim FlipEngine(102, 22.0, 30, 1, PartCount,0.1);
+    */

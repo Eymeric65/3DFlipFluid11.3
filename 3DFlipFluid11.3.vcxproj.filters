@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="CUDAkern.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FLIPimpl.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Utilitaire\glad.c">
+      <Filter>Utilitaire</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FLIPimpl.h" />
+    <ClInclude Include="Utilitaire\Camera.h">
+      <Filter>Utilitaire</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilitaire\GeoFunc.h">
+      <Filter>Utilitaire</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilitaire\Shader.h">
+      <Filter>Utilitaire</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utilitaire">
+      <UniqueIdentifier>{f5145651-cd48-4036-97b2-30f93bbd88e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{4a346c63-c753-48c3-b6d6-e8250709ecef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\vertexbase.vs">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\fragmentbase.fs">
+      <Filter>Shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>

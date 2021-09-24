@@ -1,7 +1,7 @@
 #include "FLIPimpl.h"
 #include <assert.h>
 
-
+#define COLLIDER
 
 extern "C" void TransfertToGridV2(FlipSim * flipEngine);
 
@@ -19,6 +19,7 @@ extern "C" void AddPressureV2(FlipSim * flipEngine);
 
 extern "C" void setTempWall(FlipSim * flipEngine, bool trigger);
 
+//création de la classe 
 FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned int partcount,float tstep, std::ifstream &collider )
 {
 
@@ -28,12 +29,11 @@ FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned i
 
 	Positions = (float3*)malloc(sizeof(float3) * PartCount);
 
-	std::cout << "reset partvit" << std::endl;
-	//cudaMalloc(&pos, PartCount * sizeof(float3));
-	std::string line;
-
+	//extraction des indices des cases pour les mettre dans un tableaux
+#ifdef COLLIDER
 	if (collider.is_open())
 	{
+		std::string line;
 		while (std::getline(collider, line))
 		{
 
@@ -42,28 +42,27 @@ FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned i
 			std::string delimiter = " ";
 
 			size_t pos = 0;
-			//std::string token;
-			//std::cout << "ah" << std::endl;
+
 			while ((pos = line.find(delimiter)) != std::string::npos) {
 				CollideInd.push_back(stoi(line.substr(0, pos)));
-				//std::cout << stoi(line.substr(0, pos))  << std::endl;
 				line.erase(0, pos + delimiter.length());
 			}
 			CollideInd.push_back(stoi(line.substr(pos + delimiter.length())));
-			//std::cout << stoi(line.substr(pos + delimiter.length())) << std::endl;
-			//std::cout << ind[0] << std::endl;
+
 		}
 		collider.close();
 	}
 
-	//std::cout << CollideInd[800] << std::endl;
+	std::cout << "Collider loaded : " << CollideInd.size() << std::endl;
+
+#endif
+
+	
+	//--------------
 
 	BoxSize = make_float3(width, height, length);
 
-	//positions = 2;
-
 	tileSize = tsize;
-
 
 	BoxIndice = make_uint3((int)(BoxSize.x / tileSize),
 							(int)(BoxSize.y/ tileSize),
@@ -90,6 +89,7 @@ FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned i
 
 	printf("il y a %d particules \n", PartCount);
 
+	//Allocation mémoire
 	cudaMalloc(&Partvit, PartCount * sizeof(float3));
 	cudaMemset(Partvit, 0, PartCount * sizeof(float3));
 
@@ -110,11 +110,11 @@ FlipSim::FlipSim(float width, float height,float length, float tsize, unsigned i
 
 	cudaMalloc(&GridDiv, IndiceCount * sizeof(float));
 
+#ifdef COLLIDER
 	cudaMalloc(&CollideIndCud, CollideInd.size() * sizeof(int));
 	cudaMemcpy(CollideIndCud, &CollideInd[0], CollideInd.size() * sizeof(int), cudaMemcpyHostToDevice);
-
-
-
+#endif
+	//--------------
 }
 
 void FlipSim::TransferToGrid()
@@ -123,7 +123,6 @@ void FlipSim::TransferToGrid()
 	cudaMemset(MACGridSpeed, 0, MACIndiceCount * sizeof(float3));
 	cudaMemset(type,0, IndiceCount * sizeof(unsigned int));
 	cudaMemset(GridDiv, 0, IndiceCount * sizeof(float));
-	//std::cout << " coucou " << std::endl;
 
 	TransfertToGridV2(this);
 }
@@ -142,8 +141,7 @@ void FlipSim::PressureCompute()
 {
 	cudaMemset(GridPressureB, 0, IndiceCount * sizeof(float));
 
-	JacobiIterV2(this, 100);
-
+	JacobiIterV2(this, 100); // 100 itérations de Jacobi
 }
 
 void FlipSim::AddPressure()
@@ -158,17 +156,18 @@ void FlipSim::TempWalls(bool Trigger)
 
 void FlipSim::endSim()
 {
+	//libération mémoire
 	cudaFree(MACGridSpeed);
 	cudaFree(MACGridWeight);
 	cudaFree(type);
 	cudaFree(GridPressureB);
 	cudaFree(GridPressureA);
-
 	cudaFree(Partvit);
 }
 
 void FlipSim::StartCompute()
 {
+	//lie le buffer graphique et le buffer CUDA
 	cudaGraphicsMapResources(1, &cuda_pos_resource, 0);
 	cudaGraphicsResourceGetMappedPointer((void**)&Partpos, &num_bytes_pos, cuda_pos_resource);
 
@@ -194,14 +193,12 @@ void FlipSim::Integrate()
 
 void FlipSim::EndCompute()
 {
+	// Copie des données de position dans un tableaux du CPU
 	cudaMemcpy( Positions,Partpos, PartCount * sizeof(float3), cudaMemcpyDeviceToHost);
 
+	//libération des données
 	cudaGraphicsUnmapResources(1, &cuda_pos_resource, 0);
-
 	cudaGraphicsUnmapResources(1, &cuda_col_resource, 0);
-	//std::cout << "la taille est " << Partpos[0].x << std::endl;
-
-	
 
 }
 

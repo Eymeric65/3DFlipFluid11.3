@@ -1,0 +1,22 @@
+    /*
+    for (int x = 0; x < 50; x += 1) //test fluide
+    {
+        for (int y = 0; y < 50; y += 1)
+        {
+            for (int z = 0; z < 50; z += 1)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / (2*2.5f) + 1.1f;
+                translation.y = (float)y / (2*2.5f) + 1.f;
+
+                translation.z = (float)z / (2*1.5f) + 1.1f;
+
+                position.push_back(translation);
+
+            }
+        }
+    }
+    const int PartCount = position.size();
+    //-------------------------------------------------
+
+    FlipSim FlipEngine(20.0, 20.0, 20.0, 0.5, PartCount, 0.1, Collider);*/

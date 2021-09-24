@@ -11,7 +11,6 @@ in float bubbleintense;
 
 void main()
 {
-
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - Fragpos);  
 

@@ -1,0 +1,53 @@
+    /*
+                        //longueur 1000, hauteur 200, largeur 280
+    
+    int index = 0;
+    float offset = 0.0f;
+    for (int x = 0; x < 30; x += 1)
+    {
+        for (int y = 0; y < 35; y += 1)
+        {
+            for (int z = 0; z < 30; z += 1)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / 2.0f + 1.5f;
+                translation.y = (float)y / 2.0f + 1.5f;
+                translation.z = (float)z / 2.0f + 1.5f;
+
+                position.push_back(translation);
+
+            }
+        }
+    }
+
+    const int PartCount = position.size();
+
+
+    FlipSim FlipEngine(40,20, 20, 1, PartCount, 0.1);
+    */
+    
+    /*
+    int index = 0;
+    float offset = 0.0f;
+    for (int x = 0; x < 15; x += 1)
+    {
+        for (int y = 0; y < 15; y += 1)
+        {
+            for (int z = 0; z < 10; z += 1)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / 30.0f + 0.055f;
+                translation.y = (float)y / 30.0f + 0.055f;
+                translation.z = (float)z / 30.0f + 0.055f;
+
+                position.push_back(translation);
+
+            }
+        }
+    }
+    
+    const int PartCount = position.size();
+    
+
+    FlipSim FlipEngine(1.0, 1.0, 0.5, 0.05, PartCount, 0.00000000001);
+    */
