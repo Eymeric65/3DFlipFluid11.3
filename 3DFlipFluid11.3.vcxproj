@@ -62,7 +62,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\OPENGLlib\include64;D:\bureau\prepa\TIPE\cuda113\3DFlipFluid113;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.3\common\inc</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\OPENGLlib\include64;D:\bureau\bureau\prepa\TIPE\cuda113\3DFlipFluid113;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.3\common\inc</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\OPENGLlib\lib64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
