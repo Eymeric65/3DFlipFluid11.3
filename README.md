@@ -6,4 +6,4 @@ During the year of 2019 and 2020, I have had the opportunity to work on a fluid 
 
 This project was based on three major assets : [Fluid Simulation SIGGRAPH 2007 Course Notes](DOCS/Ressources/Fluid_note.pdf), [Fluid Simulation Using Implicit Particles](DOCS/Ressources/Flip.pdf) et [Implicit Density Projection for Volume Conserving Liquids](DOCS/Ressources/Pressure.pdf).
 
-Based on this documents, I could write my own theoric paper about my simulation  : [Théorie](DOCS/theorie.pdf) (French only)
+Based on these documents, I could write my own theoric paper about my FLIP fluid simulation  : [Théorie](DOCS/theorie.pdf) (French only)
